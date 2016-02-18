@@ -1,7 +1,8 @@
+{% set image_name = 'elasticsearch' %}
 {% set es_cluster_name = salt['pillar.get']('elasticsearch:es_cluster_name', 'elasticsearch_root') %}
 {% set memory_footprint = salt['pillar.get']("elasticsearch:memory_footprint", '1g') %}
-{% set container_name = salt['pillar.get']("elasticsearch:container_name", 'elasticsearch') %}
-{% set host_ip = salt['grains.get']('ip4_interfaces:eth0:0') %}
+{% set container_name = 'elasticsearch' %}
+{% set host = salt['grains.get']('elasticsearch:host') %}
 {% set host_port = salt['pillar.get']('elasticsearch:port') %}
 
 
@@ -12,11 +13,11 @@
     - context:
       es_cluster_name: {{ es_cluster_name }}
 
-elasticsearch:
+{{ image_name }}:
   docker.pulled:
     - name: elasticsearch
 
-elasticsearch-container:
+{{ image_name }}-container:
   require:
      - docker: elasticsearch
      - file: /tmp/elasticsearch.yml
@@ -26,9 +27,9 @@ elasticsearch-container:
     - environment:
       - ES_HEAP_SIZE: {{ memory_footprint }}
 
-elasticsearch-running:
+{{ image_name }}-running:
   require:
-    - docker: elasticsearch-container
+    - docker: {{ image_name }}-container
   docker.running:
     - container: {{ container_name }}
     - image: elasticsearch
@@ -37,5 +38,5 @@ elasticsearch-running:
       - /tmp/elasticsearch.yml: /usr/local/etc/elasticsearch/elasticsearch.yml
     - ports:
         "9200/tcp":
-            HostIp: {{ host_ip }}
+            HostIp: {{ host }}
             HostPort: {{ host_port }}

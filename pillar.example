@@ -2,3 +2,4 @@ elasticsearch:
   memory_footprint: 1g
   cluster_name: elasticsearch_root
   port: 9200
+  host: localhost
