@@ -1,5 +1,5 @@
 {% set image_name = 'elasticsearch' %}
-{% set es_cluster_name = salt['pillar.get']('elasticsearch:es_cluster_name', 'elasticsearch_root') %}
+{% set es_cluster_name = salt['pillar.get']('elasticsearch:cluster_name', 'elasticsearch_root') %}
 {% set memory_footprint = salt['pillar.get']("elasticsearch:memory_footprint", '1g') %}
 {% set container_name = 'elasticsearch' %}
 {% set host = salt['grains.get']('elasticsearch:host') %}
@@ -11,7 +11,7 @@
     - source: salt://docker-elasticsearch/files/elasticsearch.yml
     - template: jinja
     - context:
-      es_cluster_name: {{ es_cluster_name }}
+      es_cluster_name: {{ cluster_name }}
 
 {{ image_name }}:
   docker.pulled:
@@ -35,7 +35,7 @@
     - image: elasticsearch
     - restart_policy: always
     - volumes:
-      - /tmp/elasticsearch.yml: /usr/local/etc/elasticsearch/elasticsearch.yml
+      - /tmp/elasticsearch.yml: /usr/share/elasticsearch/config/elasticsearch.yml
     - ports:
         "9200/tcp":
             HostIp: {{ host }}
