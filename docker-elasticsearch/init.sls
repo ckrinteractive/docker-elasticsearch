@@ -1,4 +1,4 @@
-{% set image_name = 'elasticsearch' %}
+{% set image_name = 'elasticsearch:1.5' %}
 {% set cluster_name = salt['pillar.get']('elasticsearch:cluster_name', 'elasticsearch_root') %}
 {% set memory_footprint = salt['pillar.get']("elasticsearch:memory_footprint", '1g') %}
 {% set container_name = 'elasticsearch' %}
