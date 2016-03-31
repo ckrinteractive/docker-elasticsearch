@@ -27,7 +27,7 @@
     - environment:
       - ES_HEAP_SIZE: {{ memory_footprint }}
 
-{{ image_name }}-running:
+{{ container_name }}:
   require:
     - docker: {{ image_name }}-container
   docker.running:
